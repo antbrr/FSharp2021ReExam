@@ -209,11 +209,31 @@
 
 (* Question 3.1 *)
 
-    let approxSquare _ = failwith "not implemented"
+    let rec approxSquare (x: int) (num: int) =
+        let rec closestPerfectSquareRoot x (prevCPSR:int) =
+            let diffprev = System.Math.Abs ((prevCPSR * prevCPSR) - x)
+            let diffnext = System.Math.Abs (((prevCPSR+1) * (prevCPSR+1)) - x)
+            if diffprev > diffnext then
+                closestPerfectSquareRoot x (prevCPSR + 1)
+            else prevCPSR
+        let rec approximate (x:float) (r:float) num  =
+            match num with
+            | 0 -> r
+            | _ -> let r' = ((x/r)+r)/2.0
+                   approximate x r' (num - 1)
+        approximate x (closestPerfectSquareRoot x 0) num
+        
+        
 
 (* Question 3.2 *)
 
-    let quadratic _ = failwith "not implemented"
+    let quadratic (a: int) (b: int) (c: int) (num: int) =
+        let a' = float a
+        let b' = float b
+        let x1 = (-b' + (approxSquare(b*b - 4 * a * c) num))/( 2.0 * a')
+        let x2 = (-b' - (approxSquare(b*b - 4 * a * c) num))/( 2.0 * a')
+        (x1,x2)
+                  
 
 (* Question 3.3 *)
 

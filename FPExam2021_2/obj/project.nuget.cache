@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gLx10yEREHkq/ONThFkgPd8lAf5AMlK1td4DwisIAHr/6ZVDkOs57xzK6vV1oFS6KIMdRxL1rU/+CMYntB8qlA==",
+  "dgSpecHash": "isU8hN0wRuNBhg7w5AA5xrRJ+mK1nuEv71uQVwl/SXaB0jQw8cLExrEBBEDemKZeImeTnAlZPe1VttyjVswgfQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\AMBre\\Downloads\\FPExam2021_2 (2)\\FPExam2021_2\\FPExam2021\\FPExam2021_2\\FPExam2021_2.fsproj",
+  "projectFilePath": "C:\\Users\\AMBre\\RiderProjects\\FSharp2021ReExam\\FPExam2021_2\\FPExam2021_2.fsproj",
   "expectedPackageFiles": [
     "C:\\Users\\AMBre\\.nuget\\packages\\fsharp.core\\6.0.2\\fsharp.core.6.0.2.nupkg.sha512",
     "C:\\Users\\AMBre\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.15\\microsoft.netcore.app.host.win-x64.5.0.15.nupkg.sha512"

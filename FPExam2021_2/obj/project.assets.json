@@ -118,11 +118,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AMBre\\Downloads\\FPExam2021_2 (2)\\FPExam2021_2\\FPExam2021\\FPExam2021_2\\FPExam2021_2.fsproj",
+      "projectUniqueName": "C:\\Users\\AMBre\\RiderProjects\\FSharp2021ReExam\\FPExam2021_2\\FPExam2021_2.fsproj",
       "projectName": "FPExam2021_2",
-      "projectPath": "C:\\Users\\AMBre\\Downloads\\FPExam2021_2 (2)\\FPExam2021_2\\FPExam2021\\FPExam2021_2\\FPExam2021_2.fsproj",
+      "projectPath": "C:\\Users\\AMBre\\RiderProjects\\FSharp2021ReExam\\FPExam2021_2\\FPExam2021_2.fsproj",
       "packagesPath": "C:\\Users\\AMBre\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AMBre\\Downloads\\FPExam2021_2 (2)\\FPExam2021_2\\FPExam2021\\FPExam2021_2\\obj\\",
+      "outputPath": "C:\\Users\\AMBre\\RiderProjects\\FSharp2021ReExam\\FPExam2021_2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\AMBre\\AppData\\Roaming\\NuGet\\NuGet.Config",
