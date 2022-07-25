@@ -1,4 +1,7 @@
 ﻿module Exam2021_2
+
+    open System
+
 (* If you are importing this into F# interactive then comment out
    the line above and remove the comment for the line bellow.
 
@@ -250,34 +253,63 @@
     type rat = R of (int * int)
 
 (* Question 4.2 *)
-
-    let mkRat (n: int) (d: int) =
-        let rec gcd acc =
+    
+    let gcd n d =
+        let rec aux acc =
             if n % acc = 0 && d % acc = 0
                 then acc
-            else gcd (acc - 1)
-        
+            else aux (acc - 1)
+        aux (min d n)
+    
+    let lcm a b =
+        a * b/gcd a b
+
+    let mkRat (n: int) (d: int) =
         match d with
         | 0 -> None
         | d when d < 0 && n < 0 ->
-            let g = gcd(min n d)
+            let g = gcd n d
             Some(R((-1*n/g),(-1*d/g)))
         | d when d < 0 || n < 0 ->
-            let g = gcd(min n d)
-            Some(R((-n/g),(d/g)))
+            let g = gcd n d
+            if d < 0 then
+                Some(R((-1*n/g),(Math.Abs d/g)))
+            else Some(R((n/g),(d/g)))
         | d ->
-            let g = gcd(min n d)
+            let g = gcd n d
             Some(R((n/g),(d/g)))
     
             
-    let ratToString _ = failwith "not implemented"
+    let ratToString (R(n,d)) =
+        string n + " " + "/" + " " + string d
 
 (* Question 4.3 *)
-
-    let plus _ = failwith "not implemented"
-    let minus _ = failwith "not implemented"
-    let mult _ = failwith "not implemented"
-    let div _ = failwith "not implemented"
+    let r1 = mkRat 2 3 |> Option.get
+    let r2 = mkRat 3 4 |> Option.get
+    let plus (R(a,b)) (R(c,d)) =
+        let top = (a * d + b * c)
+        let bottom = b * d
+        let thegcd = gcd top bottom
+        Some (R(top/thegcd,bottom/thegcd))
+        
+    let minus (R(a,b)) (R(c,d)) =
+        let top = (a * d - b * c)
+        let bottom = b * d
+        let thegcd = gcd top bottom
+        Some (R(top/thegcd,bottom/thegcd))
+    let mult (R(a,b)) (R(c,d)) =
+        let top = a * c
+        let bottom = b * d
+        let thegcd = gcd top bottom
+        Some (R(top/thegcd,bottom/thegcd))
+    
+    let div (R(a,b)) (R(c,d)) =
+        if b = 0 || d = 0 then None
+        else
+            let top = a * d
+            let bottom = b * c
+            let thegcd = gcd top bottom
+            Some (R(top/thegcd,bottom/thegcd))
 
 (* Question 4.4 *)
 
