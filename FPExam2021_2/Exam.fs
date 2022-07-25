@@ -247,11 +247,29 @@
 
 (* Question 4.1 *)
 
-    type rat = unit (* replace this entire type with your own *)
+    type rat = R of (int * int)
 
 (* Question 4.2 *)
 
-    let mkRat _ = failwith "not implemented"
+    let mkRat (n: int) (d: int) =
+        let rec gcd acc =
+            if n % acc = 0 && d % acc = 0
+                then acc
+            else gcd (acc - 1)
+        
+        match d with
+        | 0 -> None
+        | d when d < 0 && n < 0 ->
+            let g = gcd(min n d)
+            Some(R((-1*n/g),(-1*d/g)))
+        | d when d < 0 || n < 0 ->
+            let g = gcd(min n d)
+            Some(R((-n/g),(d/g)))
+        | d ->
+            let g = gcd(min n d)
+            Some(R((n/g),(d/g)))
+    
+            
     let ratToString _ = failwith "not implemented"
 
 (* Question 4.3 *)
