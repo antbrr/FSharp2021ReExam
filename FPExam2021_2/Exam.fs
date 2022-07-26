@@ -162,7 +162,29 @@
     *)
 
 (* Question 2.3 *) 
-    (* let foo2 xs ys = List.unfold (fun acc elem ->) (xs, ys) *)
+     
+    let foo2 xs ys =
+        List.unfold(fun (l1,l2) ->
+            match l1, l2 with
+            | [], [] -> None
+            | x :: xs, [] -> Some (x,(xs,[]))
+            | [], y :: ys -> Some(y,([],ys))
+            | x :: xs, y :: ys when x < y -> Some((x,(xs,y::ys)))
+            | x :: xs, y :: ys -> Some(y,(x::xs,ys))) (xs,ys)
+                                                   
+                                   
+                     
+     
+     (*
+     let rec foo xs ys =
+      match xs, ys with
+      | [], ys -> ys
+      | xs, [] -> xs
+      | x :: xs, y :: ys when x < y ->
+        x :: (foo xs (y :: ys))
+      | x :: xs, y :: ys ->
+        y :: (foo (x :: xs) ys)
+    *)
     
     (* use the following code as a starting template
     let foo2 xs ys = List.unfold <a function goes here> (xs, ys)
@@ -201,12 +223,55 @@
     *)
 
 (* Question 2.5 *)
+    
+      (*
+     let rec foo xs ys =
+      match xs, ys with
+      | [], ys -> ys
+      | xs, [] -> xs
+      | x :: xs, y :: ys when x < y ->
+        x :: (foo xs (y :: ys))
+      | x :: xs, y :: ys ->
+        y :: (foo (x :: xs) ys)
+    *)
 
-    let fooTail _ = failwith "not implemented"
+    let fooTail xs ys =
+        let rec aux acc xs' ys' =
+            match xs', ys' with
+            | [], [] -> List.rev acc
+            | [], ys -> List.rev acc @ ys
+            | xs, [] -> List.rev acc @ xs
+            | x :: xs, y :: ys when x < y ->
+                aux (x::acc) xs (y::ys)
+            | x:: xs, y :: ys ->
+                aux(y::acc) (x::xs) ys
+        aux [] xs ys
+        
+(* Question 2.6 *)
 
-(* Question 2.5 *)
+    let barTail lst = 
+        let rec aux lst c =
+            match lst with
+            | [] -> c []
+            | [x] -> c [x]
+            | xs ->
+                let (a, b) = List.splitAt (List.length xs / 2) xs
+                aux a (fun r1 -> 
+                    aux b (fun r2 -> 
+                    c (foo r1 r2)))
+        aux lst id
+    
+    (*
+    
+    let rec bar =
+      function
+      | [] -> []
+      | [x] -> [x]
+      | xs ->
+        let (a, b) = List.splitAt (List.length xs / 2) xs
+        foo (bar a) (bar b)
 
-    let barTail _ = failwith "not implemented"
+*)
 
 (* 3: Approximating square roots *)
 
@@ -214,8 +279,8 @@
 
     let rec approxSquare (x: int) (num: int) =
         let rec closestPerfectSquareRoot x (prevCPSR:int) =
-            let diffprev = System.Math.Abs ((prevCPSR * prevCPSR) - x)
-            let diffnext = System.Math.Abs (((prevCPSR+1) * (prevCPSR+1)) - x)
+            let diffprev = abs((prevCPSR * prevCPSR) - x)
+            let diffnext = abs(((prevCPSR+1) * (prevCPSR+1)) - x)
             if diffprev > diffnext then
                 closestPerfectSquareRoot x (prevCPSR + 1)
             else prevCPSR
@@ -243,6 +308,12 @@
     let parQuadratic _ = failwith "not implemented"
 
 (* Question 3.4 *)
+    
+    (* Question 4.5 *)
+    
+    open JParsec
+    
+    open JParsec.TextParser
 
     let solveQuadratic _ = failwith "not implemented"
 
@@ -259,57 +330,63 @@
             if n % acc = 0 && d % acc = 0
                 then acc
             else aux (acc - 1)
-        aux (min d n)
+        if n = 0 || d = 0 then max (abs n) (abs d) else aux (min (abs d) (abs n))
     
-    let lcm a b =
-        a * b/gcd a b
+    (*let gcd n d =
+        let rec aux acc = 
+            if n % acc = 0 && d % acc = 0 then acc else aux (acc - 1)
+        if n = 0 || d = 0 then max n d else min (abs n) (abs d) |> aux*)
 
     let mkRat (n: int) (d: int) =
         match d with
         | 0 -> None
         | d when d < 0 && n < 0 ->
-            let g = gcd n d
-            Some(R((-1*n/g),(-1*d/g)))
+            let g = gcd (abs n) (abs d)
+            Some (R ((-1 * n / g), (-1 * (d / g)) )) 
         | d when d < 0 || n < 0 ->
-            let g = gcd n d
+            let g = gcd (abs n) (abs d)
             if d < 0 then
-                Some(R((-1*n/g),(Math.Abs d/g)))
+                Some(R((-1*(n/g)),(abs (d/g))))
             else Some(R((n/g),(d/g)))
         | d ->
-            let g = gcd n d
+            let g = gcd (abs n) (abs d)
             Some(R((n/g),(d/g)))
+    
+   (* let mkRat n = function
+        | 0 -> None
+        | d ->
+            let g = gcd n d
+            let (n', d') = (n / g, d / g)
+            R ((if d' > 0 then n' else -n'), abs d') |> Some *)
     
             
     let ratToString (R(n,d)) =
-        string n + " " + "/" + " " + string d
+        sprintf "%A / %A" n d
+        
+        
 
 (* Question 4.3 *)
     let r1 = mkRat 2 3 |> Option.get
     let r2 = mkRat 3 4 |> Option.get
-    let plus (R(a,b)) (R(c,d)) =
-        let top = (a * d + b * c)
-        let bottom = b * d
-        let thegcd = gcd top bottom
-        Some (R(top/thegcd,bottom/thegcd))
-        
-    let minus (R(a,b)) (R(c,d)) =
-        let top = (a * d - b * c)
-        let bottom = b * d
-        let thegcd = gcd top bottom
-        Some (R(top/thegcd,bottom/thegcd))
-    let mult (R(a,b)) (R(c,d)) =
-        let top = a * c
-        let bottom = b * d
-        let thegcd = gcd top bottom
-        Some (R(top/thegcd,bottom/thegcd))
     
-    let div (R(a,b)) (R(c,d)) =
-        if b = 0 || d = 0 then None
-        else
-            let top = a * d
-            let bottom = b * c
-            let thegcd = gcd top bottom
-            Some (R(top/thegcd,bottom/thegcd))
+    let plus (R(a,b)) (R(c,d)) =
+         let num = (a * d) + (b * c)
+         let den = b * d
+         mkRat num den
+    let minus (R(a,b)) (R(c,d)) =
+        let num = (a * d) - (b * c)
+        let den = b * d
+        mkRat num den
+      
+    let mult (R(a,b)) (R(c,d)) =
+        let num = a * c
+        let den = b * d
+        mkRat num den
+    
+    let div (R(a,b)) (R(c,d))  =
+        let num = a * d
+        let den = b * c
+        mkRat num den
 
 (* Question 4.4 *)
 
@@ -327,10 +404,10 @@
     let (>>>=) m n = m >>= (fun () -> n)
     let evalSM (SM f) s = f s 
 
-    let smPlus _ = failwith "not implemented"
-    let smMinus _ = failwith "not implemented"
-    let smMult _ = failwith "not implemented"
-    let smDiv _ = failwith "not implemented"
+    let smPlus (r: rat) = SM(fun state -> plus r state |> Option.map (fun r -> (), r))
+    let smMinus (r: rat) = SM(fun state -> minus state r |> Option.map (fun r -> (), r))
+    let smMult (r: rat) = SM(fun state -> mult r state |> Option.map (fun r -> (), r))
+    let smDiv (r: rat) = SM(fun state -> div state r |> Option.map (fun r -> (), r))
 
 (* Question 4.5 *)
 
@@ -347,4 +424,5 @@
 
     let state = new StateBuilder()
 
-    let calculate _ = failwith "not implemented"
+    let calculate (lst:(rat * (rat -> SM<unit>)) list) =
+        List.fold(fun acc (rat,operator) -> acc >>>= operator rat) (ret ()) lst
